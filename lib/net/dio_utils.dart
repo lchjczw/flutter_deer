@@ -112,10 +112,20 @@ class DioUtils {
           if (onSuccessList != null) {
             onSuccessList(result.listData);
           }
-        } else {
+          return;
+        }
+
+        if (result.isData) {
           if (onSuccess != null) {
             onSuccess(result.data);
           }
+          return;
+        }
+        if (result.isError) {
+          if (onError != null) {
+            _onError(result.code, result.message, onError);
+          }
+          return;
         }
       } else {
         _onError(result.code, result.message, onError);
@@ -146,14 +156,24 @@ class DioUtils {
         .asBroadcastStream()
         .listen((result) {
       if (result.code == ExceptionHandle.success) {
-        if (isList) {
+        if (result.isList) {
           if (onSuccessList != null) {
             onSuccessList(result.listData);
           }
-        } else {
+          return;
+        }
+        if (result.isData) {
           if (onSuccess != null) {
             onSuccess(result.data);
           }
+          return;
+        }
+
+        if (result.isError) {
+          if (onError != null) {
+            _onError(result.code, result.message, onError);
+          }
+          return;
         }
       } else {
         _onError(result.code, result.message, onError);

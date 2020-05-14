@@ -7,6 +7,10 @@ class BaseEntity<T> {
   T data;
   List<T> listData = [];
 
+  bool isList;
+  bool isData;
+  bool isError;
+
   BaseEntity(this.code, this.message, this.data);
 
   BaseEntity.fromJson(Map<String, dynamic> json) {
@@ -14,6 +18,7 @@ class BaseEntity<T> {
     if (json[Constant.error] != null) {
       code = json[Constant.error][Constant.code] ?? ExceptionHandle.not_found;
       message = json[Constant.message] ?? '请求失败';
+      isError = true;
       return;
     }
 
@@ -24,15 +29,11 @@ class BaseEntity<T> {
       (json[Constant.list] as List).forEach((item) {
         listData.add(item as T);
       });
+      isList = true;
       return;
     }
 
     data = json as T;
+    isData = true;
   }
-
-  bool get isData => data == null;
-
-  bool get isList => listData.length != 0;
-
-  bool get isError => code == 200;
 }
