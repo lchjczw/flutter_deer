@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter_deer/net/dio_utils.dart';
 
 class LoginInfoBase {
@@ -27,25 +31,39 @@ class LoginInfoBase {
     tokenType = json['token_type'];
   }
 
+  // md5 加密
+  static String Md5(String data) {
+    var content = new Utf8Encoder().convert(data);
+    var digest = md5.convert(content);
+    // 这里其实就是 digest.toString()
+    return hex.encode(digest.bytes);
+  }
+
   //  todo 其他基础业务逻辑 代码生成器生成
   post({
     dynamic params,
-    Function(LoginInfoBase t) onSuccess,
-    Function(List<LoginInfoBase> list) onSuccessList,
+    Function(dynamic base) onSuccess,
+    Function(List list) onSuccessList,
     Function(int code, String msg) onError,
   }) async {
     //    await DioUtils.instance.requestNetwork<LoginInfoBase>(
     //        Method.post, '/api/v1/pub/login',
     //        params: params, onSuccess: onSuccess, onError: onError);
 
-    DioUtils.instance.asyncRequestNetwork<LoginInfoBase>(
-        Method.post, '/api/v1/pub/login',
+    DioUtils.instance.asyncRequestNetwork(Method.post, '/api/v1/pub/login',
         params: params, onSuccess: onSuccess, onError: onError);
   }
 
   StreamPost(dynamic params) {
-    return DioUtils.instance.asyncRequestNetwork<LoginInfoBase>(
-        Method.post, '/api/v1/pub/login',
-        params: params);
+    return DioUtils.instance
+        .asyncRequestNetwork(Method.post, '/api/v1/pub/login', params: params);
+  }
+
+  login({
+    dynamic params,
+    Function(dynamic base) onSuccess,
+    Function(int code, String msg) onError,
+  }) {
+    post(params: params, onSuccess: onSuccess, onError: onError);
   }
 }

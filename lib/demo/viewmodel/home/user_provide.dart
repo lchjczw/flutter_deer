@@ -1,6 +1,5 @@
 import 'package:flutter_deer/bash/base.dart';
-
-import 'file:///F:/project/kcptun/flutter_deer/lib/demo/models/home_repository.dart';
+import 'package:flutter_deer/demo/models/model/base/Login.dart';
 
 class UserProvide extends BaseProvide {
   // 页数
@@ -15,12 +14,17 @@ class UserProvide extends BaseProvide {
   get info => _data;
 
   userUnfo(var params) {
-    _repo.info(params, HomeService(),
-        onError: (int code, String message) => info = '$code,$message',
-        onSeccess: (HomeService d) {
+    start();
+    LoginInfoBase loginInfo = LoginInfoBase();
+    params['password'] = LoginInfoBase.Md5(params['password']);
+    loginInfo.login(
+        params: params,
+        onError: (code, message) {
+          info = '$code,$message';
+        },
+        onSuccess: (dynamic base) {
+          LoginInfoBase d = LoginInfoBase.fromJson(base);
           info = d.toJson().toString();
         });
   }
-
-  final HomeRepo _repo = HomeRepo();
 }
