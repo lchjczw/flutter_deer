@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_deer/common/common.dart';
+import 'package:flutter_deer/datas/viewmodels/demo_provide.dart';
 import 'package:flutter_deer/datas/viewmodels/login_provide.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/store/store_router.dart';
 import 'package:flutter_deer/util/utils.dart';
 import 'package:flutter_deer/widgets/app_bar.dart';
 import 'package:flutter_deer/widgets/my_button.dart';
@@ -28,7 +28,8 @@ class _LoginPageState extends State<LoginPage> {
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
   bool _clickable = false;
-  LoginProvide loginProvide = LoginProvide();
+  LoginProvide loginProvide;
+  DemoProvide demoProvide;
 
   @override
   void initState() {
@@ -37,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
     _nameController.addListener(_verify);
     _passwordController.addListener(_verify);
     _nameController.text = SpUtil.getString(Constant.phone);
+    loginProvide = LoginProvide(context);
+    demoProvide = DemoProvide(context);
   }
 
   void _verify() {
@@ -59,12 +62,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() {
-    loginProvide.login(_nameController.text, _passwordController.text,
-        (bool ok) {
-      if (ok == true) {
-        NavigatorUtils.push(context, StoreRouter.auditPage);
-      }
-    });
+    loginProvide.login(_nameController.text, _passwordController.text);
   }
 
   @override
@@ -139,6 +137,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
               onTap: () =>
                   NavigatorUtils.push(context, LoginRouter.registerPage),
-            ))
+            )),
+        FlatButton(onPressed: () => demoProvide.query(), child: Text('query')),
+        FlatButton(onPressed: () => demoProvide.get(), child: Text('get')),
+        FlatButton(onPressed: () => demoProvide.post(), child: Text('post')),
       ];
 }
