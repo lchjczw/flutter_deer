@@ -128,17 +128,21 @@ class DioUtils {
           return;
         }
       } else {
-        _onError(result.code, result.message, onError);
+        if (onError != null) {
+          _onError(result.code, result.message, onError);
+        }
       }
     }, onError: (e, _) {
       _cancelLogPrint(e, url);
       NetError error = ExceptionHandle.handleException(e);
-      _onError(error.code, error.msg, onError);
+      if (onError != null) {
+        _onError(error.code, error.msg, onError);
+      }
     });
   }
 
   /// 统一处理(onSuccess返回T对象，onSuccessList返回List<T>)
-  asyncRequestNetwork<T>(Method method, String url,
+  Stream<BaseEntity<T>> asyncRequestNetwork<T>(Method method, String url,
       {Function(T t) onSuccess,
       Function(List<T> list) onSuccessList,
       Function(int code, String msg) onError,
@@ -148,41 +152,49 @@ class DioUtils {
       Options options,
       bool isList: false}) {
     String m = _getRequestMethod(method);
-    Stream.fromFuture(_request<T>(m, url,
+    Stream<BaseEntity<T>> s = Stream.fromFuture(_request<T>(m, url,
             data: params,
             queryParameters: queryParameters,
             options: options,
             cancelToken: cancelToken))
-        .asBroadcastStream()
-        .listen((result) {
-      if (result.code == ExceptionHandle.success) {
-        if (result.isList) {
-          if (onSuccessList != null) {
-            onSuccessList(result.listData);
+        .asBroadcastStream();
+    // 如何设置了回调
+    if (!(onError == null && onSuccess == null && onSuccessList == null)) {
+      s.listen((result) {
+        if (result.code == ExceptionHandle.success) {
+          if (result.isList) {
+            if (onSuccessList != null) {
+              onSuccessList(result.listData);
+            }
+            return;
           }
-          return;
-        }
-        if (result.isData) {
-          if (onSuccess != null) {
-            onSuccess(result.data);
+          if (result.isData) {
+            if (onSuccess != null) {
+              onSuccess(result.data);
+            }
+            return;
           }
-          return;
-        }
 
-        if (result.isError) {
+          if (result.isError) {
+            if (onError != null) {
+              _onError(result.code, result.message, onError);
+            }
+            return;
+          }
+        } else {
           if (onError != null) {
             _onError(result.code, result.message, onError);
           }
-          return;
         }
-      } else {
-        _onError(result.code, result.message, onError);
-      }
-    }, onError: (e) {
-      _cancelLogPrint(e, url);
-      NetError error = ExceptionHandle.handleException(e);
-      _onError(error.code, error.msg, onError);
-    });
+      }, onError: (e) {
+        _cancelLogPrint(e, url);
+        NetError error = ExceptionHandle.handleException(e);
+        if (onError != null) {
+          _onError(error.code, error.msg, onError);
+        }
+      });
+    }
+    return s;
   }
 
   _cancelLogPrint(dynamic e, String url) {
