@@ -28,10 +28,6 @@ class LoginModel {
     Function(List list) onSuccessList,
     Function(int code, String msg) onError,
   }) async {
-    //    await DioUtils.instance.requestNetwork<LoginModel>(
-    //        Method.post, '/api/v1/pub/login',
-    //        params: params, onSuccess: onSuccess, onError: onError);
-
     DioUtils.instance.asyncRequestNetwork(Method.post, '/api/v1/pub/login',
         params: params, onSuccess: onSuccess, onError: onError);
   }
