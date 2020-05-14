@@ -28,19 +28,24 @@ class LoginInfoBase {
   }
 
   //  todo 其他基础业务逻辑 代码生成器生成
-
   post({
     dynamic params,
     Function(LoginInfoBase t) onSuccess,
     Function(List<LoginInfoBase> list) onSuccessList,
     Function(int code, String msg) onError,
   }) async {
-//    await DioUtils.instance.requestNetwork<LoginInfoBase>(
-//        Method.post, '/api/v1/pub/login',
-//        params: params, onSuccess: onSuccess, onError: onError);
+    //    await DioUtils.instance.requestNetwork<LoginInfoBase>(
+    //        Method.post, '/api/v1/pub/login',
+    //        params: params, onSuccess: onSuccess, onError: onError);
 
     DioUtils.instance.asyncRequestNetwork<LoginInfoBase>(
         Method.post, '/api/v1/pub/login',
         params: params, onSuccess: onSuccess, onError: onError);
+  }
+
+  StreamPost(dynamic params) {
+    return DioUtils.instance.asyncRequestNetwork<LoginInfoBase>(
+        Method.post, '/api/v1/pub/login',
+        params: params);
   }
 }
