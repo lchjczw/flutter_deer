@@ -24,7 +24,7 @@ class LoginModel {
   //  todo 其他基础业务逻辑 代码生成器生成 会被覆盖
   post({
     dynamic params,
-    Function(dynamic base) onSuccess,
+    Function(dynamic data) onSuccess,
     Function(List list) onSuccessList,
     Function(int code, String msg) onError,
   }) {
