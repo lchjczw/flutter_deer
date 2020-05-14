@@ -2,19 +2,22 @@ import 'dart:convert';
 
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter_deer/models/login_model.dart';
+
+import '../models/login_model.dart';
 
 class LoginService {
   LoginModel model;
 
-  LoginService({this.model});
+  LoginService() {
+    this.model = LoginModel();
+  }
 
   LoginService.fromJson(Map<String, dynamic> json) {
     model = LoginModel.fromJson(json);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = model.toJson();
+    final Map<String, dynamic> data = model?.toJson();
     return data;
   }
 
@@ -31,6 +34,6 @@ class LoginService {
     Function(dynamic base) onSuccess,
     Function(int code, String msg) onError,
   }) {
-    model.post(params: params, onSuccess: onSuccess, onError: onError);
+    model?.post(params: params, onSuccess: onSuccess, onError: onError);
   }
 }
