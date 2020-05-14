@@ -38,14 +38,12 @@ class LoginInfoBase {
     //        Method.post, '/api/v1/pub/login',
     //        params: params, onSuccess: onSuccess, onError: onError);
 
-    DioUtils.instance.asyncRequestNetwork<LoginInfoBase>(
-        Method.post, '/api/v1/pub/login',
+    DioUtils.instance.asyncRequestNetwork(Method.post, '/api/v1/pub/login',
         params: params, onSuccess: onSuccess, onError: onError);
   }
 
   StreamPost(dynamic params) {
-    return DioUtils.instance.asyncRequestNetwork<LoginInfoBase>(
-        Method.post, '/api/v1/pub/login',
-        params: params);
+    return DioUtils.instance
+        .asyncRequestNetwork(Method.post, '/api/v1/pub/login', params: params);
   }
 }

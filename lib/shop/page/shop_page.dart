@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_deer/account/account_router.dart';
+import 'package:flutter_deer/demo/demo_routers.dart';
 import 'package:flutter_deer/mvp/base_page.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
 import 'package:flutter_deer/setting/setting_router.dart';
-import 'package:flutter_deer/shop/models/user_entity.dart';
 import 'package:flutter_deer/shop/iview/shop_iview.dart';
+import 'package:flutter_deer/shop/models/user_entity.dart';
 import 'package:flutter_deer/shop/presenter/shop_presenter.dart';
 import 'package:flutter_deer/shop/provider/user_provider.dart';
 import 'package:flutter_deer/shop/shop_router.dart';
@@ -17,26 +17,28 @@ import 'package:provider/provider.dart';
 
 /// design/6店铺-账户/index.html#artboard0
 class ShopPage extends StatefulWidget {
-
   const ShopPage({
     Key key,
     this.isAccessibilityTest: false,
-  }) : super(key : key);
+  }) : super(key: key);
 
   final bool isAccessibilityTest;
-  
+
   @override
   _ShopPageState createState() => _ShopPageState();
 }
 
-class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPagePresenter>, AutomaticKeepAliveClientMixin<ShopPage> implements ShopIMvpView {
-  
-  var _menuTitle = ['账户流水', '资金管理', '提现账号'];
-  var _menuImage = ['zhls', 'zjgl', 'txzh'];
-  var _menuDarkImage = ['dark_zhls', 'dark_zjgl', 'dark_txzh'];
+class _ShopPageState extends State<ShopPage>
+    with
+        BasePageMixin<ShopPage, ShopPagePresenter>,
+        AutomaticKeepAliveClientMixin<ShopPage>
+    implements ShopIMvpView {
+  var _menuTitle = ['账户流水', '资金管理', '提现账号', 'demo'];
+  var _menuImage = ['zhls', 'zjgl', 'txzh', 'txzh'];
+  var _menuDarkImage = ['dark_zhls', 'dark_zjgl', 'dark_txzh', 'dark_txzh'];
 
   UserProvider provider = UserProvider();
-  
+
   @override
   void setUser(UserEntity user) {
     provider.setUser(user);
@@ -44,7 +46,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
 
   @override
   bool get isAccessibilityTest => widget.isAccessibilityTest;
-  
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -101,19 +103,24 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                           Positioned(
                               right: 0.0,
                               child: CircleAvatar(
-                                radius: 28.0,
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: ImageUtils.getImageProvider(provider.user?.avatarUrl, holderImg: 'shop/tx')
-                              )
-                          ),
+                                  radius: 28.0,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: ImageUtils.getImageProvider(
+                                      provider.user?.avatarUrl,
+                                      holderImg: 'shop/tx'))),
                           Positioned(
                             top: 38.0,
                             left: 0.0,
                             child: Row(
                               children: <Widget>[
-                                const LoadAssetImage('shop/zybq', width: 40.0, height: 16.0,),
+                                const LoadAssetImage(
+                                  'shop/zybq',
+                                  width: 40.0,
+                                  height: 16.0,
+                                ),
                                 Gaps.hGap8,
-                                const Text('店铺账号:15000000000', style: TextStyles.textSize12)
+                                const Text('店铺账号:15000000000',
+                                    style: TextStyles.textSize12)
                               ],
                             ),
                           ),
@@ -124,7 +131,12 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                 },
               ),
               Gaps.vGap24,
-              Container(height: 0.6, width: double.infinity, margin: const EdgeInsets.only(left: 16.0), child: Gaps.line,),
+              Container(
+                height: 0.6,
+                width: double.infinity,
+                margin: const EdgeInsets.only(left: 16.0),
+                child: Gaps.line,
+              ),
               Gaps.vGap24,
               const MergeSemantics(
                 child: Padding(
@@ -141,16 +153,18 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                   padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 12.0),
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 1.18
-                  ),
+                      crossAxisCount: 4, childAspectRatio: 1.18),
                   itemCount: _menuTitle.length,
                   itemBuilder: (_, index) {
                     return InkWell(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          LoadAssetImage(ThemeUtils.isDark(context) ? 'shop/${_menuDarkImage[index]}' : 'shop/${_menuImage[index]}', width: 32.0),
+                          LoadAssetImage(
+                              ThemeUtils.isDark(context)
+                                  ? 'shop/${_menuDarkImage[index]}'
+                                  : 'shop/${_menuImage[index]}',
+                              width: 32.0),
                           Gaps.vGap4,
                           Text(
                             _menuTitle[index],
@@ -160,18 +174,28 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                       ),
                       onTap: () {
                         if (index == 0) {
-                          NavigatorUtils.push(context, AccountRouter.accountRecordListPage);
+                          NavigatorUtils.push(
+                              context, AccountRouter.accountRecordListPage);
                         } else if (index == 1) {
-                          NavigatorUtils.push(context, AccountRouter.accountPage);
+                          NavigatorUtils.push(
+                              context, AccountRouter.accountPage);
                         } else if (index == 2) {
-                          NavigatorUtils.push(context, AccountRouter.withdrawalAccountPage);
+                          NavigatorUtils.push(
+                              context, AccountRouter.withdrawalAccountPage);
+                        } else if (index == 3) {
+                          NavigatorUtils.push(context, DemoRouter.demoPage);
                         }
                       },
                     );
                   },
                 ),
               ),
-              Container(height: 0.6, width: double.infinity, margin: const EdgeInsets.only(left: 16.0), child: Gaps.line,),
+              Container(
+                height: 0.6,
+                width: double.infinity,
+                margin: const EdgeInsets.only(left: 16.0),
+                child: Gaps.line,
+              ),
               Gaps.vGap24,
               const MergeSemantics(
                 child: Padding(
@@ -188,16 +212,18 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                   padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 12.0),
                   physics: NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      childAspectRatio: 1.18
-                  ),
+                      crossAxisCount: 4, childAspectRatio: 1.18),
                   itemCount: 1,
                   itemBuilder: (_, index) {
                     return InkWell(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          LoadAssetImage(ThemeUtils.isDark(context) ? 'shop/dark_dpsz' : 'shop/dpsz', width: 32.0),
+                          LoadAssetImage(
+                              ThemeUtils.isDark(context)
+                                  ? 'shop/dark_dpsz'
+                                  : 'shop/dpsz',
+                              width: 32.0),
                           Gaps.vGap4,
                           const Text(
                             '店铺设置',
@@ -205,14 +231,14 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                           )
                         ],
                       ),
-                      onTap: () => NavigatorUtils.push(context, ShopRouter.shopSettingPage),
+                      onTap: () => NavigatorUtils.push(
+                          context, ShopRouter.shopSettingPage),
                     );
                   },
                 ),
               ),
             ],
-          )
-      ),
+          )),
     );
   }
 
@@ -221,5 +247,4 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
 
   @override
   ShopPagePresenter createPresenter() => ShopPagePresenter();
- 
 }
