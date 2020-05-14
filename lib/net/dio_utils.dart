@@ -48,7 +48,7 @@ class DioUtils {
     _dio.interceptors.add(AuthInterceptor());
 
     /// 刷新Token
-    _dio.interceptors.add(TokenInterceptor());
+    //    _dio.interceptors.add(TokenInterceptor());
 
     /// 打印Log(生产模式去除)
     if (!Constant.inProduction) {
@@ -60,7 +60,7 @@ class DioUtils {
   }
 
   // 数据返回格式统一，统一处理异常
-  Future<BaseEntity<T>> _request<T>(String method, String url,
+  Future<BaseEntity> _request(String method, String url,
       {dynamic data,
       Map<String, dynamic> queryParameters,
       CancelToken cancelToken,
@@ -72,7 +72,7 @@ class DioUtils {
         cancelToken: cancelToken);
     try {
       /// 集成测试无法使用 isolate https://github.com/flutter/flutter/issues/24703
-      var bashEntity = BaseEntity.fromJson(response.data);
+      var bashEntity = BaseEntity.fromJson(json.decode(response.data));
       if (bashEntity.code != response.statusCode) {
         bashEntity.code = response.statusCode;
       }
@@ -91,9 +91,9 @@ class DioUtils {
     return options;
   }
 
-  Future requestNetwork<T>(Method method, String url,
-      {Function(T t) onSuccess,
-      Function(List<T> list) onSuccessList,
+  Future<BaseEntity> requestNetwork(Method method, String url,
+      {Function(dynamic t) onSuccess,
+      Function(List<dynamic> list) onSuccessList,
       Function(int code, String msg) onError,
       dynamic params,
       Map<String, dynamic> queryParameters,
@@ -101,27 +101,27 @@ class DioUtils {
       Options options,
       bool isList: false}) {
     String m = _getRequestMethod(method);
-    return _request<T>(m, url,
+    return _request(m, url,
             data: params,
             queryParameters: queryParameters,
             options: options,
             cancelToken: cancelToken)
-        .then((BaseEntity<T> result) {
+        .then((BaseEntity result) {
       if (result.code == ExceptionHandle.success) {
-        if (result.isList) {
+        if (result.isList != null) {
           if (onSuccessList != null) {
             onSuccessList(result.listData);
           }
           return;
         }
 
-        if (result.isData) {
+        if (result.isData != null) {
           if (onSuccess != null) {
             onSuccess(result.data);
           }
           return;
         }
-        if (result.isError) {
+        if (result.isError != null) {
           if (onError != null) {
             _onError(result.code, result.message, onError);
           }
@@ -142,9 +142,9 @@ class DioUtils {
   }
 
   /// 统一处理(onSuccess返回T对象，onSuccessList返回List<T>)
-  Stream<BaseEntity<T>> asyncRequestNetwork<T>(Method method, String url,
-      {Function(T t) onSuccess,
-      Function(List<T> list) onSuccessList,
+  Stream<BaseEntity> asyncRequestNetwork(Method method, String url,
+      {Function(dynamic t) onSuccess,
+      Function(List<dynamic> list) onSuccessList,
       Function(int code, String msg) onError,
       dynamic params,
       Map<String, dynamic> queryParameters,
@@ -152,7 +152,7 @@ class DioUtils {
       Options options,
       bool isList: false}) {
     String m = _getRequestMethod(method);
-    Stream<BaseEntity<T>> s = Stream.fromFuture(_request<T>(m, url,
+    Stream<BaseEntity> s = Stream.fromFuture(_request(m, url,
             data: params,
             queryParameters: queryParameters,
             options: options,
@@ -162,20 +162,20 @@ class DioUtils {
     if (!(onError == null && onSuccess == null && onSuccessList == null)) {
       s.listen((result) {
         if (result.code == ExceptionHandle.success) {
-          if (result.isList) {
+          if (result.isList != null) {
             if (onSuccessList != null) {
               onSuccessList(result.listData);
             }
             return;
           }
-          if (result.isData) {
+          if (result.isData != null) {
             if (onSuccess != null) {
               onSuccess(result.data);
             }
             return;
           }
 
-          if (result.isError) {
+          if (result.isError != null) {
             if (onError != null) {
               _onError(result.code, result.message, onError);
             }

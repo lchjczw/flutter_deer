@@ -165,22 +165,6 @@ class AdapterInterceptor extends Interceptor {
         response.statusCode = ExceptionHandle.not_found;
         return response;
       }
-
-      // list为空
-      if (response.data[Constant.list] != null) {
-        if ((response.data[Constant.list] as List).length < 1) {
-          response.data = {
-            Constant.error: {
-              Constant.code: ExceptionHandle.not_found,
-              Constant.message: _kNotFound
-            }
-          };
-
-          response.statusCode = ExceptionHandle.not_found;
-          return response;
-        }
-      }
-
       return response;
     }
 

@@ -1,11 +1,11 @@
 import 'package:flutter_deer/common/common.dart';
 import 'package:flutter_deer/net/error_handle.dart';
 
-class BaseEntity<T> {
+class BaseEntity {
   int code;
   String message;
-  T data;
-  List<T> listData = [];
+  dynamic data;
+  List<dynamic> listData = [];
 
   bool isList;
   bool isData;
@@ -13,10 +13,11 @@ class BaseEntity<T> {
 
   BaseEntity(this.code, this.message, this.data);
 
-  BaseEntity.fromJson(Map<String, dynamic> json) {
+  BaseEntity.fromJson(Map<dynamic, dynamic> json) {
     //    错误
     if (json[Constant.error] != null) {
-      code = json[Constant.error][Constant.code] ?? ExceptionHandle.not_found;
+      json = json[Constant.error];
+      code = json[Constant.code] ?? ExceptionHandle.not_found;
       message = json[Constant.message] ?? '请求失败';
       isError = true;
       return;
@@ -24,16 +25,17 @@ class BaseEntity<T> {
 
     //    处理list
     if (json[Constant.list] != null) {
+      json = json[Constant.list];
       code = ExceptionHandle.success;
       message = '请求成功';
-      (json[Constant.list] as List).forEach((item) {
-        listData.add(item as T);
+      (json as List).forEach((item) {
+        listData.add(item);
       });
       isList = true;
       return;
     }
 
-    data = json as T;
+    data = json;
     isData = true;
   }
 }
