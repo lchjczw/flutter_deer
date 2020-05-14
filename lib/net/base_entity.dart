@@ -25,12 +25,12 @@ class BaseEntity {
 
     //    处理list
     if (json[Constant.list] != null) {
-      json = json[Constant.list];
+      listData = json[Constant.list];
       code = ExceptionHandle.success;
       message = '请求成功';
-      (json as List).forEach((item) {
-        listData.add(item);
-      });
+//      (json as List).forEach((item) {
+//        listData.add(item);
+//      });
       isList = true;
       return;
     }
