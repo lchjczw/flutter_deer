@@ -23,6 +23,7 @@ abstract class ItemPresenter<T> {
 
 /// BaseProvide
 class BaseProvide with ChangeNotifier {
+  BuildContext context;
   CompositeSubscription compositeSubscription = CompositeSubscription();
 
   /// add [StreamSubscription] to [compositeSubscription]
