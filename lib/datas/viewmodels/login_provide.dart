@@ -1,17 +1,21 @@
 import 'package:flustars/flustars.dart' as FlutterStars;
+import 'package:flutter/material.dart';
 import 'package:flutter_deer/base/base.dart';
 import 'package:flutter_deer/common/common.dart';
 import 'package:flutter_deer/datas/services/login_service.dart';
+import 'package:flutter_deer/routers/fluro_navigator.dart';
+import 'package:flutter_deer/store/store_router.dart';
 
 class LoginProvide extends BaseProvide {
   // 页数
   LoginService service;
 
-  LoginProvide() {
+  LoginProvide(BuildContext ctx) {
     service = LoginService();
+    context = ctx;
   }
 
-  login(var name, var pass, call(bool ok)) {
+  login(var name, var pass) {
     start(msg: '开始登录');
     FlutterStars.SpUtil.putString(Constant.phone, name);
 
@@ -25,15 +29,14 @@ class LoginProvide extends BaseProvide {
     service?.login(
         params: params,
         onError: (code, message) {
-          call(false);
           end(msg: message);
         },
         onSuccess: (dynamic json) {
           service = LoginService.fromJson(json);
           FlutterStars.SpUtil.putString(
               Constant.accessToken, service.model.accessToken);
-          call(true);
           end(msg: '登录成功');
+          NavigatorUtils.push(context, StoreRouter.auditPage);
         });
   }
 }

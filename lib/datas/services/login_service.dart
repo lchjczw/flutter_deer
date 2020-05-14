@@ -31,7 +31,7 @@ class LoginService {
 
   login({
     dynamic params,
-    Function(dynamic base) onSuccess,
+    Function(dynamic data) onSuccess,
     Function(int code, String msg) onError,
   }) {
     model?.post(params: params, onSuccess: onSuccess, onError: onError);
