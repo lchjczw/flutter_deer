@@ -16,10 +16,11 @@ class Constant {
 
   static const String keyGuide = 'keyGuide';
   static const String phone = 'phone';
-  static const String accessToken = 'accessToken';
+  static const String accessToken = 'access_token';
   static const String refreshToken = 'refreshToken';
 
   static const String theme = 'AppTheme';
 
-  static const String bashUrl = 'https://api.github.com/';
+//  static const String bashUrl = 'https://api.github.com/';
+  static const String bashUrl = 'http://192.168.31.248:10088';
 }
