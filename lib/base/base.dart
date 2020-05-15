@@ -14,7 +14,7 @@ class BaseProvide with ChangeNotifier {
   BuildContext get context => isActive ? ctx : null;
 
   set context(BuildContext c) {
-    context = c;
+    ctx = c;
   }
 
   CompositeSubscription compositeSubscription = CompositeSubscription();
