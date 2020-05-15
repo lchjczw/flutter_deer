@@ -4,6 +4,7 @@ import 'package:flutter_deer/datas/views/test_router.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
 import 'package:flutter_deer/widgets/app_bar.dart';
 import 'package:flutter_deer/widgets/my_scroll_view.dart';
+import 'package:flutter_deer/widgets/sub_menu.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -16,6 +17,16 @@ class _IndexPageState extends State<IndexPage> implements BasePage {
     super.initState();
     initProvide();
   }
+
+  List<SubMenuData> _setMenus = [
+    SubMenuData('demo示例', 'user', 'yjms', TestRouter.demoPage),
+    SubMenuData('demo示例', 'user', 'yjms', TestRouter.demoPage),
+    SubMenuData('demo示例', 'user', 'yjms', TestRouter.demoPage),
+    SubMenuData('demo示例', 'user', 'yjms', TestRouter.demoPage),
+    SubMenuData('demo示例', 'user', 'yjms', TestRouter.demoPage),
+    SubMenuData('demo示例', 'user', 'yjms', TestRouter.demoPage),
+    SubMenuData('demo示例', 'user', 'yjms', TestRouter.demoPage),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +47,7 @@ class _IndexPageState extends State<IndexPage> implements BasePage {
         FlatButton(
             onPressed: () => NavigatorUtils.push(context, TestRouter.demoPage),
             child: Text('demo示例')),
+        SubMenu(_setMenus),
       ];
 
   @override
