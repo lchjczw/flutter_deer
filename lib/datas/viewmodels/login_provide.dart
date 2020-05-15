@@ -1,5 +1,4 @@
 import 'package:flustars/flustars.dart' as FlutterStars;
-import 'package:flutter/material.dart';
 import 'package:flutter_deer/base/base.dart';
 import 'package:flutter_deer/common/common.dart';
 import 'package:flutter_deer/datas/services/login_service.dart';
@@ -8,12 +7,7 @@ import 'package:flutter_deer/store/store_router.dart';
 
 class LoginProvide extends BaseProvide {
   // 页数
-  LoginService service;
-
-  LoginProvide(BuildContext c) {
-    service = LoginService();
-    ctx = c;
-  }
+  LoginService service = LoginService();
 
   login(var name, var pass) {
     start(msg: '开始登录');

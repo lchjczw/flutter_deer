@@ -1,12 +1,11 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_deer/base/base.dart';
 import 'package:flutter_deer/datas/services/demo_service.dart';
 
 class DemoProvide extends BaseProvide {
   // 页数
-  DemoService service;
+  DemoService service = DemoService();
   List<DemoService> list = [];
   String _msg;
 
@@ -16,11 +15,6 @@ class DemoProvide extends BaseProvide {
   }
 
   String get msg => _msg;
-
-  DemoProvide(BuildContext c) {
-    service = DemoService();
-    ctx = c;
-  }
 
   query() {
     start(msg: '开始查询');

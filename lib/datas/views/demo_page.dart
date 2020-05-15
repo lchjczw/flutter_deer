@@ -12,8 +12,8 @@ class DemoPage extends StatefulWidget {
 }
 
 class _DemoPageState extends State<DemoPage> implements BasePage {
-  LoginProvide loginProvide;
-  DemoProvide demoProvide;
+  LoginProvide loginProvide = LoginProvide();
+  DemoProvide demoProvide = DemoProvide();
 
   @override
   void initState() {
@@ -57,8 +57,8 @@ class _DemoPageState extends State<DemoPage> implements BasePage {
   initProvide() {
     // 等待页面渲染完成,初始化provide
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      loginProvide = LoginProvide(context);
-      demoProvide = DemoProvide(context);
+      loginProvide.context = context;
+      demoProvide.context = context;
     });
   }
 }

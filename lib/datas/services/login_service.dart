@@ -9,7 +9,7 @@ class LoginService {
   LoginModel model;
 
   LoginService() {
-    this.model = LoginModel();
+    model = LoginModel();
   }
 
   LoginService.fromJson(Map<String, dynamic> json) {
