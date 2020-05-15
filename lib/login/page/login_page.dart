@@ -29,8 +29,8 @@ class _LoginPageState extends State<LoginPage> implements BasePage {
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
   bool _clickable = false;
-  LoginProvide loginProvide;
-  DemoProvide demoProvide;
+  LoginProvide loginProvide = LoginProvide();
+  DemoProvide demoProvide = DemoProvide();
 
   @override
   void initState() {
@@ -145,8 +145,7 @@ class _LoginPageState extends State<LoginPage> implements BasePage {
   initProvide() {
     // 等待页面渲染完成,初始化provide
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      loginProvide = LoginProvide(context);
-      demoProvide = DemoProvide(context);
+      loginProvide.context = context;
     });
   }
 }
