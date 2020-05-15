@@ -45,7 +45,7 @@ class DemoModel {
   }
 
   //  todo 其他基础业务逻辑 代码生成器生成 会被覆盖
-//  ?current=1&pageSize=10&queryValue=%E6%B5%8B%E8%AF%95
+  //  ?current=1&pageSize=10&queryValue=%E6%B5%8B%E8%AF%95
   query({
     dynamic params,
     Function(List<dynamic> data) onSuccess,
@@ -72,5 +72,44 @@ class DemoModel {
   }) {
     DioUtils.instance.asyncRequestNetwork(Method.post, '/api/v1/demos',
         params: params, onSuccess: onSuccess, onError: onError);
+  }
+
+  update({
+    String id,
+    dynamic params,
+    Function(dynamic data) onSuccess,
+    Function(int code, String msg) onError,
+  }) {
+    DioUtils.instance.asyncRequestNetwork(Method.put, '/api/v1/demos/' + id,
+        params: params, onSuccess: onSuccess, onError: onError);
+  }
+
+  delete({
+    String id,
+    Function(dynamic data) onSuccess,
+    Function(int code, String msg) onError,
+  }) {
+    DioUtils.instance.asyncRequestNetwork(Method.delete, '/api/v1/demos/' + id,
+        onSuccess: onSuccess, onError: onError);
+  }
+
+  enable({
+    String id,
+    Function(dynamic data) onSuccess,
+    Function(int code, String msg) onError,
+  }) {
+    DioUtils.instance.asyncRequestNetwork(
+        Method.patch, '/api/v1/demos/' + id + '/enable',
+        onSuccess: onSuccess, onError: onError);
+  }
+
+  disable({
+    String id,
+    Function(dynamic data) onSuccess,
+    Function(int code, String msg) onError,
+  }) {
+    DioUtils.instance.asyncRequestNetwork(
+        Method.patch, '/api/v1/demos/' + id + '/disable',
+        onSuccess: onSuccess, onError: onError);
   }
 }

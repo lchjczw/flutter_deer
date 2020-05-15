@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_deer/account/account_router.dart';
+import 'package:flutter_deer/datas/views/test_router.dart';
 import 'package:flutter_deer/mvp/base_page.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
@@ -32,9 +33,9 @@ class _ShopPageState extends State<ShopPage>
         BasePageMixin<ShopPage, ShopPagePresenter>,
         AutomaticKeepAliveClientMixin<ShopPage>
     implements ShopIMvpView {
-  var _menuTitle = ['账户流水', '资金管理', '提现账号'];
-  var _menuImage = ['zhls', 'zjgl', 'txzh'];
-  var _menuDarkImage = ['dark_zhls', 'dark_zjgl', 'dark_txzh'];
+  var _menuTitle = ['账户流水', '资金管理', '提现账号', '页面测试'];
+  var _menuImage = ['zhls', 'zjgl', 'txzh', 'txzh'];
+  var _menuDarkImage = ['dark_zhls', 'dark_zjgl', 'dark_txzh', 'dark_txzh'];
 
   UserProvider provider = UserProvider();
 
@@ -181,6 +182,8 @@ class _ShopPageState extends State<ShopPage>
                         } else if (index == 2) {
                           NavigatorUtils.push(
                               context, AccountRouter.withdrawalAccountPage);
+                        } else if (index == 3) {
+                          NavigatorUtils.push(context, TestRouter.indexPage);
                         }
                       },
                     );

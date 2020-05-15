@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_deer/base/base.dart';
 import 'package:flutter_deer/datas/services/demo_service.dart';
@@ -5,6 +7,15 @@ import 'package:flutter_deer/datas/services/demo_service.dart';
 class DemoProvide extends BaseProvide {
   // 页数
   DemoService service;
+  List<DemoService> list = [];
+  String _msg;
+
+  set msg(String s) {
+    _msg = s;
+    notify();
+  }
+
+  String get msg => _msg;
 
   DemoProvide(BuildContext c) {
     service = DemoService();
@@ -16,46 +27,102 @@ class DemoProvide extends BaseProvide {
     var params = {
       "current": 1,
       "pageSize": 10,
-      "queryValue": "测试",
+      //      "queryValue": "测试",
     };
 
     service?.query(
-        params: params,
-        onError: (code, message) {
-          end(msg: message);
-        },
-        onSuccess: (List<dynamic> list) {
-          list.forEach((json) {
-            service = DemoService.fromJson(json);
-            print(service);
-          });
-          end(msg: '请求成功');
-        });
+        params: params, onError: errDemo, onSuccess: successDemoList);
   }
 
   get() {
     service?.get(
-        id: '48186073590796288',
-        onError: (code, message) {
-          end(msg: message);
-        },
-        onSuccess: (dynamic json) {
-          service = DemoService.fromJson(json);
-          print(service);
+        id: list[0]?.model?.id ?? '48186073590796288',
+        onError: errDemo,
+        onSuccess: successDemo);
+  }
 
-          end(msg: '请求成功');
-        });
+  String randString({int strlenght = 12}) {
+    String alphabet = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
+
+    /// 生成的字符串固定长度
+    String left = '';
+    for (var i = 0; i < strlenght; i++) {
+      // right = right + (min + (Random().nextInt(max - min))).toString();
+      left = left + alphabet[Random().nextInt(alphabet.length)];
+    }
+    return left;
   }
 
   post() {
-    service?.post(
-        params: {"code": "123", "memo": "123", "name": "123", "status": 1},
-        onError: (code, message) {
-          end(msg: message);
+    service?.post(params: {
+      "code": randString(),
+      "memo": randString(),
+      "name": randString(),
+      "status": 1
+    }, onError: errDemo, onSuccess: successOther);
+  }
+
+  update() {
+    service?.update(
+        id: list[0]?.model?.id ?? '48186073590796288',
+        params: {
+          "code": randString(),
+          "memo": randString(),
+          "name": randString(),
+          "status": 1
         },
-        onSuccess: (dynamic json) {
-          print(json);
-          end(msg: '请求成功');
-        });
+        onError: errDemo,
+        onSuccess: successOther);
+  }
+
+  delete() {
+    service?.delete(
+        id: list[0]?.model?.id ?? '48186073590796288',
+        onError: errDemo,
+        onSuccess: successOther);
+  }
+
+  enable() {
+    service?.enable(
+        id: list[0]?.model?.id ?? '48186073590796288',
+        onError: errDemo,
+        onSuccess: successOther);
+  }
+
+  disable() {
+    service?.disable(
+        id: list[0]?.model?.id ?? '48186073590796288',
+        onError: errDemo,
+        onSuccess: successOther);
+  }
+
+  errDemo(int code, String message) {
+    end(msg: message ?? '发生错误');
+    msg = message;
+  }
+
+  successDemo(dynamic json) {
+    print(json);
+    service = DemoService.fromJson(json);
+    msg = json.toString();
+    end(msg: '请求成功');
+  }
+
+  successDemoList(List<dynamic> l) {
+    end(msg: '请求成功');
+    msg = '';
+    list = [];
+    l.forEach((json) {
+      DemoService tmp = DemoService.fromJson(json);
+      print(tmp);
+      msg += tmp.toJson().toString();
+      list.add(tmp);
+    });
+  }
+
+  successOther(dynamic json) {
+    print(json);
+    msg = json.toString();
+    end(msg: '请求成功');
   }
 }

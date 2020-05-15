@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_deer/account/account_router.dart';
+import 'package:flutter_deer/datas/views/test_router.dart';
 import 'package:flutter_deer/goods/goods_router.dart';
 import 'package:flutter_deer/home/home_page.dart';
 import 'package:flutter_deer/home/webview_page.dart';
@@ -50,6 +51,7 @@ class Routes {
     _listRouter.add(AccountRouter());
     _listRouter.add(SettingRouter());
     _listRouter.add(StatisticsRouter());
+    _listRouter.add(TestRouter());
 
     /// 初始化路由
     _listRouter.forEach((routerProvider) {

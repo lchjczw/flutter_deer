@@ -139,9 +139,6 @@ class _LoginPageState extends State<LoginPage> implements BasePage {
               onTap: () =>
                   NavigatorUtils.push(context, LoginRouter.registerPage),
             )),
-        FlatButton(onPressed: () => demoProvide.query(), child: Text('query')),
-        FlatButton(onPressed: () => demoProvide.get(), child: Text('get')),
-        FlatButton(onPressed: () => demoProvide.post(), child: Text('post')),
       ];
 
   @override
