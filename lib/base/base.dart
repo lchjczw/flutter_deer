@@ -2,28 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_deer/net/base_entity.dart';
-import 'package:flutter_deer/util/toast.dart';
+import 'package:flutter_deer/routers/fluro_navigator.dart';
+import 'package:flutter_deer/util/utils.dart';
+import 'package:flutter_deer/widgets/progress_dialog.dart';
 import 'package:rxdart/rxdart.dart';
-
-/// normal click event
-abstract class Presenter {
-  /// 处理点击事件
-  ///
-  /// 可根据 [action] 进行区分 ,[action] 应是不可变的量
-  void onClick(String action);
-}
-
-/// ListView Item Click
-abstract class ItemPresenter<T> {
-  /// 处理列表点击事件
-  ///
-  /// 可根据 [action] 进行区分 ,[action] 应是不可变的量
-  void onItemClick(String action, T item);
-}
 
 /// BaseProvide
 class BaseProvide with ChangeNotifier {
-  BuildContext context;
+  BuildContext ctx;
+
+  BuildContext get context => isActive ? ctx : null;
+
+  set context(BuildContext c) {
+    context = c;
+  }
+
   CompositeSubscription compositeSubscription = CompositeSubscription();
 
   /// add [StreamSubscription] to [compositeSubscription]
@@ -63,37 +56,68 @@ class BaseProvide with ChangeNotifier {
     if (message == null || message.isEmpty) {
       return;
     }
-    Toast.show(message);
+    showProgress(message: message);
   }
 
-  start({msg: '加载中'}) {
-    show(msg);
+  bool _isShowDialog = false;
+
+  bool get isActive {
+    try {
+      if (ctx?.widget == null) {
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  void closeProgress() {
+    if (isActive && _isShowDialog) {
+      _isShowDialog = false;
+      NavigatorUtils.goBack(context);
+    }
+  }
+
+  void showProgress({String message}) {
+    if (message == null || message.isEmpty) {
+      message = '正在加载...';
+    }
+
+    /// 避免重复弹出
+    if (isActive && !_isShowDialog) {
+      _isShowDialog = true;
+      try {
+        showTransparentDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return WillPopScope(
+                onWillPop: () async {
+                  // 拦截到返回键，证明dialog被手动关闭
+                  _isShowDialog = false;
+                  return Future.value(true);
+                },
+                child: ProgressDialog(hintText: message),
+              );
+            });
+      } catch (e) {
+        /// 异常原因主要是页面没有build完成就调用Progress。
+        print(e);
+      }
+    }
+  }
+
+  start({msg: '正在加载...'}) {
+    showProgress(message: msg);
   }
 
   end({msg: '加载完成'}) {
-    show(msg);
+    closeProgress();
   }
 }
 
-/// BaseProvide
-mixin BasePresenter {
-  CompositeSubscription compositeSubscription = CompositeSubscription();
-
-  /// add [StreamSubscription] to [compositeSubscription]
-  ///
-  /// 在 [dispose]的时候能进行取消
-  addSubscription(StreamSubscription subscription) {
-    compositeSubscription.add(subscription);
-  }
-
-  void dispose() {
-    if (!compositeSubscription.isDisposed) {
-      compositeSubscription.dispose();
-    }
-  }
-}
-
-// ignore: camel_case_types
-abstract class Init {
-  void init();
+abstract class BasePage {
+  initProvide();
 }

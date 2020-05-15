@@ -2,6 +2,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_deer/base/base.dart';
 import 'package:flutter_deer/common/common.dart';
 import 'package:flutter_deer/datas/viewmodels/demo_provide.dart';
 import 'package:flutter_deer/datas/viewmodels/login_provide.dart';
@@ -21,7 +22,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> implements BasePage {
   //定义一个controller
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -38,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
     _nameController.addListener(_verify);
     _passwordController.addListener(_verify);
     _nameController.text = SpUtil.getString(Constant.phone);
-    loginProvide = LoginProvide(context);
-    demoProvide = DemoProvide(context);
+
+    initProvide();
   }
 
   void _verify() {
@@ -142,4 +143,13 @@ class _LoginPageState extends State<LoginPage> {
         FlatButton(onPressed: () => demoProvide.get(), child: Text('get')),
         FlatButton(onPressed: () => demoProvide.post(), child: Text('post')),
       ];
+
+  @override
+  initProvide() {
+    // 等待页面渲染完成,初始化provide
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loginProvide = LoginProvide(context);
+      demoProvide = DemoProvide(context);
+    });
+  }
 }

@@ -10,9 +10,9 @@ class LoginProvide extends BaseProvide {
   // 页数
   LoginService service;
 
-  LoginProvide(BuildContext ctx) {
+  LoginProvide(BuildContext c) {
     service = LoginService();
-    context = ctx;
+    ctx = c;
   }
 
   login(var name, var pass) {

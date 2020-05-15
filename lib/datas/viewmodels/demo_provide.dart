@@ -6,9 +6,9 @@ class DemoProvide extends BaseProvide {
   // 页数
   DemoService service;
 
-  DemoProvide(BuildContext ctx) {
+  DemoProvide(BuildContext c) {
     service = DemoService();
-    context = ctx;
+    ctx = c;
   }
 
   query() {
