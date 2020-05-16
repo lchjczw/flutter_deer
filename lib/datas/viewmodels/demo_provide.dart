@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter_deer/base/base.dart';
+import 'package:flutter_deer/base/util.dart';
 import 'package:flutter_deer/datas/services/demo_service.dart';
 
 class DemoProvide extends BaseProvide {
@@ -22,6 +21,7 @@ class DemoProvide extends BaseProvide {
       "current": 1,
       "pageSize": 10,
       //      "queryValue": "测试",
+      // "name": "Name string",// "nameId": "NameID string",// "code": "Code string",// "memo": "Memo string",// "status": 1,
     };
 
     service?.query(
@@ -35,24 +35,16 @@ class DemoProvide extends BaseProvide {
         onSuccess: successDemo);
   }
 
-  String randString({int strlenght = 12}) {
-    String alphabet = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
-
-    /// 生成的字符串固定长度
-    String left = '';
-    for (var i = 0; i < strlenght; i++) {
-      // right = right + (min + (Random().nextInt(max - min))).toString();
-      left = left + alphabet[Random().nextInt(alphabet.length)];
-    }
-    return left;
-  }
-
   post() {
     service?.post(params: {
-      "code": randString(),
-      "memo": randString(),
+      //"code": randString(),
+      //"memo": randString(),
+      //"name": randString(),
+      //"status": 1
       "name": randString(),
-      "status": 1
+      "name_id": randString(),
+      "code": randString(),
+      "status": 1,
     }, onError: errDemo, onSuccess: successOther);
   }
 

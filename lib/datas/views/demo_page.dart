@@ -62,3 +62,4 @@ class _DemoPageState extends State<DemoPage> implements BasePage {
     });
   }
 }
+

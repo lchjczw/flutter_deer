@@ -57,7 +57,6 @@ class DemoService {
   }) {
     model?.delete(id: id, onSuccess: onSuccess, onError: onError);
   }
-
   enable({
     String id,
     Function(dynamic data) onSuccess,
@@ -74,3 +73,4 @@ class DemoService {
     model?.disable(id: id, onSuccess: onSuccess, onError: onError);
   }
 }
+

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_deer/base/base.dart';
 import 'package:flutter_deer/datas/viewmodels/user_provider.dart';
-import 'package:flutter_deer/login/login_router.dart';
+import 'package:flutter_deer/datas/views/test_router.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
 import 'package:flutter_deer/setting/setting_router.dart';
 import 'package:flutter_deer/user/user_router.dart';
-import 'package:flutter_deer/user/widgets/user_setting_menu.dart';
 import 'package:flutter_deer/util/image_utils.dart';
 import 'package:flutter_deer/util/theme_utils.dart';
 import 'package:flutter_deer/widgets/load_image.dart';
@@ -28,24 +27,8 @@ class IndexPage extends StatefulWidget {
 class IndexPageState extends State<IndexPage>
     with AutomaticKeepAliveClientMixin<IndexPage>
     implements BasePage {
-  //  List<SubMenuData> _menus = [
-  //    SubMenuData('账户流水', 'shop', 'zhls', AccountRouter.accountRecordListPage),
-  //    SubMenuData('资金管理', 'shop', 'zjgl', AccountRouter.accountPage),
-  //    SubMenuData('提现账号', 'shop', 'txzh', AccountRouter.withdrawalAccountPage),
-  //  ];
-  //  List<SubMenuData> _shopMenus = [
-  //    SubMenuData('店铺设置', 'shop', 'dpsz', UserRouter.userSettingPage),
-  //    SubMenuData('店铺审核', 'shop', 'dpsz', StoreRouter.auditPage),
-  //    SubMenuData('订单', 'shop', 'dpsz', OrderRouter.orderPage),
-  //    SubMenuData('商品', 'shop', 'dpsz', GoodsRouter.goodsPage),
-  //    SubMenuData('统计', 'shop', 'dpsz', StatisticsRouter.orderStatisticsPage),
-  //    SubMenuData('店铺', 'shop', 'dpsz', ShopRouter.shopPage),
-  //  ];
-  List<SubMenuData> _setMenus = [
-    SubMenuData('夜间模式', 'shop', 'txzh', SettingRouter.themePage),
-    SubMenuData('我的账号', 'shop', 'txzh', SettingRouter.accountManagerPage),
-    SubMenuData('关于我们', 'shop', 'txzh', SettingRouter.aboutPage),
-    SubMenuData('退出登录', 'shop', 'txzh', LoginRouter.loginPage),
+  List<SubMenuData> _demoMenus = [
+    SubMenuData('demo示例', 'shop', 'txzh', TestRouter.demoPage),
   ];
   UserProvider provider = UserProvider();
 
@@ -144,11 +127,7 @@ class IndexPageState extends State<IndexPage>
               //                margin: const EdgeInsets.only(left: 16.0),
               //                child: Gaps.line,
               //              ),
-              Gaps.vGap32,
-
-              SubMenu(_setMenus),
-              Gaps.vGap32,
-              UserSettingMenu(),
+              SubMenu(_demoMenus),
             ],
           )),
     );
