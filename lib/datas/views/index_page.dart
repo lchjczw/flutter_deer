@@ -24,12 +24,13 @@ class IndexPage extends StatefulWidget {
   IndexPageState createState() => IndexPageState();
 }
 
+List<SubMenuData> demoMenus = [
+  SubMenuData('demo示例', 'shop', 'txzh', TestRouter.demoPage),
+];
+
 class IndexPageState extends State<IndexPage>
     with AutomaticKeepAliveClientMixin<IndexPage>
     implements BasePage {
-  List<SubMenuData> _demoMenus = [
-    SubMenuData('demo示例', 'shop', 'txzh', TestRouter.demoPage),
-  ];
   UserProvider provider = UserProvider();
 
   @override
@@ -127,7 +128,7 @@ class IndexPageState extends State<IndexPage>
               //                margin: const EdgeInsets.only(left: 16.0),
               //                child: Gaps.line,
               //              ),
-              SubMenu(_demoMenus),
+              SubMenu(demoMenus),
             ],
           )),
     );

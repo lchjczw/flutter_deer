@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_deer/account/account_router.dart';
 import 'package:flutter_deer/base/base.dart';
 import 'package:flutter_deer/datas/viewmodels/user_provider.dart';
-import 'package:flutter_deer/datas/views/test_router.dart';
+import 'package:flutter_deer/datas/views/index_page.dart';
 import 'package:flutter_deer/goods/goods_router.dart';
 import 'package:flutter_deer/login/login_router.dart';
 import 'package:flutter_deer/order/order_router.dart';
@@ -53,10 +53,6 @@ class UserPageState extends State<UserPage>
     SubMenuData('我的账号', 'shop', 'txzh', SettingRouter.accountManagerPage),
     SubMenuData('关于我们', 'shop', 'txzh', SettingRouter.aboutPage),
     SubMenuData('退出登录', 'shop', 'txzh', LoginRouter.loginPage),
-  ];
-  List<SubMenuData> _demoMenus = [
-    SubMenuData('demo示例', 'shop', 'txzh', TestRouter.demoPage),
-    SubMenuData('demo示例', 'shop', 'txzh', TestRouter.demoPage),
   ];
   UserProvider provider = UserProvider();
 
@@ -158,7 +154,7 @@ class UserPageState extends State<UserPage>
 //              SubMenu(_menus),
 //              SubMenu(_setMenus),
 //              SubMenu(_shopMenus),
-              SubMenu(_demoMenus),
+              SubMenu(demoMenus),
               //              UserSettingMenu(),
             ],
           )),
