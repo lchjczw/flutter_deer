@@ -1,5 +1,5 @@
-import 'package:flutter_deer/base/base.dart';
-import 'package:flutter_deer/base/util.dart';
+import 'package:flutter_deer/datas/base/base.dart';
+import 'package:flutter_deer/datas/base/util.dart';
 import 'package:flutter_deer/datas/services/demo_service.dart';
 
 class DemoProvide extends BaseProvide {
@@ -37,10 +37,6 @@ class DemoProvide extends BaseProvide {
 
   post() {
     service?.post(params: {
-      //"code": randString(),
-      //"memo": randString(),
-      //"name": randString(),
-      //"status": 1
       "name": randString(),
       "name_id": randString(),
       "code": randString(),

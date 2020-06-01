@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_deer/base/base.dart';
+import 'package:flutter_deer/datas/base/base.dart';
 
 class FingerprintProvider extends BaseProvide {
   List<int> _list;

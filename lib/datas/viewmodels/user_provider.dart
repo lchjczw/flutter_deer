@@ -1,4 +1,4 @@
-import 'package:flutter_deer/base/base.dart';
+import 'package:flutter_deer/datas/base/base.dart';
 import 'package:flutter_deer/datas/models/user_model.dart';
 
 class UserProvider extends BaseProvide {

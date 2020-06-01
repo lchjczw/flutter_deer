@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/base/base.dart';
-import 'package:flutter_deer/base/i_provide.dart';
+import 'package:flutter_deer/datas/base/base.dart';
+import 'package:flutter_deer/datas/base/i_provide.dart';
 import 'package:flutter_deer/datas/viewmodels/demo_provide.dart';
 import 'package:flutter_deer/datas/viewmodels/login_provide.dart';
 import 'package:flutter_deer/widgets/app_bar.dart';
@@ -62,4 +62,3 @@ class _DemoPageState extends State<DemoPage> implements BasePage {
     });
   }
 }
-

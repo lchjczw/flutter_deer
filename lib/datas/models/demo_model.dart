@@ -1,37 +1,35 @@
 import 'package:flutter_deer/net/dio_utils.dart';
 
 class DemoModel {
-String id;
-String name;
-String nameId;
-String code;
-String memo;
-String status;
-String creator;
+  String id;
+  String name;
+  String nameId;
+  String code;
+  String memo;
+  String status;
+  String creator;
 
   String createdAt;
   String updatedAt;
 
-  DemoModel(
-      {
-	  this.id,
-this.name,
-this.nameId,
-this.code,
-this.memo,
-this.status,
-this.creator,
-
-  	  });
+  DemoModel({
+    this.id,
+    this.name,
+    this.nameId,
+    this.code,
+    this.memo,
+    this.status,
+    this.creator,
+  });
 
   DemoModel.fromJson(Map<String, dynamic> json) {
-	id = json['id'];
-name = json['name'];
-nameId = json['name_id'];
-code = json['code'];
-memo = json['memo'];
-status = json['status'];
-creator = json['creator'];
+    id = json['id'];
+    name = json['name'];
+    nameId = json['name_id'];
+    code = json['code'];
+    memo = json['memo'];
+    status = json['status'];
+    creator = json['creator'];
 
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -39,13 +37,13 @@ creator = json['creator'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-	data['id'] = this.id;
-data['name'] = this.name;
-data['name_id'] = this.nameId;
-data['code'] = this.code;
-data['memo'] = this.memo;
-data['status'] = this.status;
-data['creator'] = this.creator;
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['name_id'] = this.nameId;
+    data['code'] = this.code;
+    data['memo'] = this.memo;
+    data['status'] = this.status;
+    data['creator'] = this.creator;
 
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
@@ -99,6 +97,7 @@ data['creator'] = this.creator;
     DioUtils.instance.asyncRequestNetwork(Method.delete, '/api/v1/demos/' + id,
         onSuccess: onSuccess, onError: onError);
   }
+
   enable({
     String id,
     Function(dynamic data) onSuccess,

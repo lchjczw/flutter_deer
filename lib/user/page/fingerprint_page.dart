@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_deer/base/base.dart';
+import 'package:flutter_deer/datas/base/base.dart';
 import 'package:flutter_deer/datas/viewmodels/fingerprint_provider.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/util/screen_utils.dart';

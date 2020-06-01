@@ -108,23 +108,17 @@ class DioUtils {
             cancelToken: cancelToken)
         .then((BaseEntity result) {
       if (result.code == ExceptionHandle.success) {
-        if (result.isList != null) {
-          if (onSuccessList != null) {
-            onSuccessList(result.listData);
-          }
+        if (result.isList != null && onSuccessList != null) {
+          onSuccessList(result.listData);
           return;
         }
 
-        if (result.isData != null) {
-          if (onSuccess != null) {
-            onSuccess(result.data);
-          }
+        if (result.isData != null && onSuccess != null) {
+          onSuccess(result.data);
           return;
         }
-        if (result.isError != null) {
-          if (onError != null) {
-            _onError(result.code, result.message, onError);
-          }
+        if (result.isError != null && onError != null) {
+          _onError(result.code, result.message, onError);
           return;
         }
       } else {
@@ -132,6 +126,7 @@ class DioUtils {
           _onError(result.code, result.message, onError);
         }
       }
+      return;
     }, onError: (e, _) {
       _cancelLogPrint(e, url);
       NetError error = ExceptionHandle.handleException(e);
@@ -159,41 +154,33 @@ class DioUtils {
             cancelToken: cancelToken))
         .asBroadcastStream();
     // 如何设置了回调
-    if (!(onError == null && onSuccess == null && onSuccessList == null)) {
-      s.listen((result) {
-        if (result.code == ExceptionHandle.success) {
-          if (result.isList != null) {
-            if (onSuccessList != null) {
-              onSuccessList(result.listData);
-            }
-            return;
-          }
-          if (result.isData != null) {
-            if (onSuccess != null) {
-              onSuccess(result.data);
-            }
-            return;
-          }
+    s.listen((result) {
+      if (result.code == ExceptionHandle.success) {
+        if (result.isList != null && onSuccessList != null) {
+          onSuccessList(result.listData);
+          return;
+        }
+        if (result.isData != null && onSuccess != null) {
+          onSuccess(result.data);
+          return;
+        }
 
-          if (result.isError != null) {
-            if (onError != null) {
-              _onError(result.code, result.message, onError);
-            }
-            return;
-          }
-        } else {
-          if (onError != null) {
-            _onError(result.code, result.message, onError);
-          }
+        if (result.isError != null && onError != null) {
+          _onError(result.code, result.message, onError);
+          return;
         }
-      }, onError: (e) {
-        _cancelLogPrint(e, url);
-        NetError error = ExceptionHandle.handleException(e);
+      } else {
         if (onError != null) {
-          _onError(error.code, error.msg, onError);
+          _onError(result.code, result.message, onError);
         }
-      });
-    }
+      }
+    }, onError: (e) {
+      _cancelLogPrint(e, url);
+      NetError error = ExceptionHandle.handleException(e);
+      if (onError != null) {
+        _onError(error.code, error.msg, onError);
+      }
+    });
     return s;
   }
 

@@ -22,5 +22,6 @@ class Constant {
   static const String theme = 'AppTheme';
 
 //  static const String bashUrl = 'https://api.github.com/';
-  static const String bashUrl = 'http://192.168.31.248:10088';
+//  static const String bashUrl = 'http://192.168.31.248:10088';
+  static const String bashUrl = 'http://bspeech.hec-bang.com';
 }
