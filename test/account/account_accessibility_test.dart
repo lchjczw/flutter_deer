@@ -1,10 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_deer/account/page/account_page.dart';
 import 'package:flutter_deer/account/page/account_record_list_page.dart';
-import 'package:flutter_deer/account/page/add_withdrawal_account_page.dart';
-import 'package:flutter_deer/account/page/bank_select_page.dart';
-import 'package:flutter_deer/account/page/city_select_page.dart';
 import 'package:flutter_deer/account/page/withdrawal_account_list_page.dart';
 import 'package:flutter_deer/account/page/withdrawal_account_page.dart';
 import 'package:flutter_deer/account/page/withdrawal_page.dart';
@@ -15,20 +11,16 @@ import 'package:flutter_deer/provider/theme_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  
   var map = Map<String, Widget>();
   map['account_page'] = AccountPage();
   map['account_record_list_page'] = AccountRecordListPage();
-  map['add_withdrawal_account_page'] = AddWithdrawalAccountPage();
-  map['bank_select_page'] = BankSelectPage();
-  map['city_select_page'] = CitySelectPage();
   map['withdrawal_account_list_page'] = WithdrawalAccountListPage();
   map['withdrawal_account_page'] = WithdrawalAccountPage();
   map['withdrawal_page'] = WithdrawalPage();
   map['withdrawal_password_page'] = WithdrawalPasswordPage();
   map['withdrawal_record_list_page'] = WithdrawalRecordListPage();
   map['withdrawal_result_page'] = WithdrawalResultPage();
-  
+
   group('account => 检测页面可点击目标大小是否大于44 * 44', () {
     map.forEach((name, page) {
       testWidgets(name, (WidgetTester tester) async {
@@ -75,12 +67,11 @@ void main() {
           await tester.pumpWidget(MaterialApp(theme: theme, home: page));
           await expectLater(tester, meetsGuideline(textContrastGuideline));
           handle.dispose();
-        }, skip: (
-            name == 'add_withdrawal_account_page' || 
-            name == 'withdrawal_page' ||
-            name == 'withdrawal_result_page'
-          )
-        ); // https://github.com/flutter/flutter/issues/21647
+        },
+            skip: (name == 'add_withdrawal_account_page' ||
+                name == 'withdrawal_page' ||
+                name ==
+                    'withdrawal_result_page')); // https://github.com/flutter/flutter/issues/21647
       });
     }
   });
