@@ -1,13 +1,13 @@
-
+import 'package:flustars/flustars.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter_deer/common/common.dart';
-import 'package:flutter_deer/localization/app_localizations.dart';
+import 'package:flutter_deer/datas/base/base.dart';
+import 'package:flutter_deer/datas/viewmodels/demo_provide.dart';
+import 'package:flutter_deer/datas/viewmodels/login_provide.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/store/store_router.dart';
 import 'package:flutter_deer/util/utils.dart';
 import 'package:flutter_deer/widgets/app_bar.dart';
 import 'package:flutter_deer/widgets/my_button.dart';
@@ -22,38 +22,31 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> implements BasePage {
   //定义一个controller
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
   bool _clickable = false;
+  LoginProvide loginProvide = LoginProvide();
+  DemoProvide demoProvide = DemoProvide();
 
   @override
   void initState() {
     super.initState();
-    //监听输入改变  
+    //监听输入改变
     _nameController.addListener(_verify);
     _passwordController.addListener(_verify);
     _nameController.text = SpUtil.getString(Constant.phone);
-  }
 
-  @override
-  void dispose() {
-    _nameController.removeListener(_verify);
-    _passwordController.removeListener(_verify);
-    _nameController.dispose();
-    _passwordController.dispose();
-    _nodeText1.dispose();
-    _nodeText2.dispose();
-    super.dispose();
+    initProvide();
   }
 
   void _verify() {
-    var name = _nameController.text;
-    var password = _passwordController.text;
-    var clickable = true;
+    String name = _nameController.text;
+    String password = _passwordController.text;
+    bool clickable = true;
     if (name.isEmpty || name.length < 11) {
       clickable = false;
     }
@@ -68,86 +61,91 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
-  
+
   void _login() {
-    SpUtil.putString(Constant.phone, _nameController.text);
-    NavigatorUtils.push(context, StoreRouter.auditPage);
+    loginProvide.login(_nameController.text, _passwordController.text);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
         isBack: false,
-        actionName: AppLocalizations.of(context).verificationCodeLogin,
+        actionName: '验证码登录',
         onPressed: () {
           NavigatorUtils.push(context, LoginRouter.smsLoginPage);
         },
       ),
       body: MyScrollView(
-        keyboardConfig: Utils.getKeyboardActionsConfig(context, [_nodeText1, _nodeText2]),
+        keyboardConfig:
+            Utils.getKeyboardActionsConfig(context, [_nodeText1, _nodeText2]),
         padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0),
         children: _buildBody,
       ),
     );
   }
 
-  List<Widget> get _buildBody => [
-    Text(
-      AppLocalizations.of(context).passwordLogin,
-      style: TextStyles.textBold26,
-    ),
-    Gaps.vGap16,
-    MyTextField(
-      key: const Key('phone'),
-      focusNode: _nodeText1,
-      controller: _nameController,
-      maxLength: 11,
-      keyboardType: TextInputType.phone,
-      hintText: AppLocalizations.of(context).inputUsernameHint,
-    ),
-    Gaps.vGap8,
-    MyTextField(
-      key: const Key('password'),
-      keyName: 'password',
-      focusNode: _nodeText2,
-      isInputPwd: true,
-      controller: _passwordController,
-      keyboardType: TextInputType.visiblePassword,
-      maxLength: 16,
-      hintText: AppLocalizations.of(context).inputPasswordHint,
-    ),
-    Gaps.vGap24,
-    MyButton(
-      key: const Key('login'),
-      onPressed: _clickable ? _login : null,
-      text: AppLocalizations.of(context).login,
-    ),
-    Container(
-      height: 40.0,
-      alignment: Alignment.centerRight,
-      child: GestureDetector(
-        child: Text(
-          AppLocalizations.of(context).forgotPasswordLink,
-          key: const Key('forgotPassword'),
-          style: Theme.of(context).textTheme.subtitle2,
+  get _buildBody => [
+        const Text(
+          '密码登录',
+          style: TextStyles.textBold26,
         ),
-        onTap: () => NavigatorUtils.push(context, LoginRouter.resetPasswordPage),
-      ),
-    ),
-    Gaps.vGap16,
-    Container(
-      alignment: Alignment.center,
-      child: GestureDetector(
-        child: Text(
-          AppLocalizations.of(context).noAccountRegisterLink,
-          key: const Key('noAccountRegister'),
-          style: TextStyle(
-            color: Theme.of(context).primaryColor
+        Gaps.vGap16,
+        MyTextField(
+          key: const Key('phone'),
+          focusNode: _nodeText1,
+          controller: _nameController,
+          maxLength: 11,
+          keyboardType: TextInputType.phone,
+          hintText: '请输入账号',
+        ),
+        Gaps.vGap8,
+        MyTextField(
+          key: const Key('password'),
+          keyName: 'password',
+          focusNode: _nodeText2,
+          isInputPwd: true,
+          controller: _passwordController,
+          keyboardType: TextInputType.visiblePassword,
+          maxLength: 16,
+          hintText: '请输入密码',
+        ),
+        Gaps.vGap24,
+        MyButton(
+          key: const Key('login'),
+          onPressed: _clickable ? _login : null,
+          text: '登录',
+        ),
+        Container(
+          height: 40.0,
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            child: Text(
+              '忘记密码',
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
+            onTap: () =>
+                NavigatorUtils.push(context, LoginRouter.resetPasswordPage),
           ),
         ),
-        onTap: () => NavigatorUtils.push(context, LoginRouter.registerPage),
-      )
-    )
-  ];
+        Gaps.vGap16,
+        Container(
+            alignment: Alignment.center,
+            child: GestureDetector(
+              child: Text(
+                '还没账号？快去注册',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              onTap: () =>
+                  NavigatorUtils.push(context, LoginRouter.registerPage),
+            )),
+      ];
+
+  @override
+  initProvide() {
+    // 等待页面渲染完成,初始化provide
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loginProvide.context = context;
+    });
+  }
 }
