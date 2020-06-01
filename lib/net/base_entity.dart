@@ -1,37 +1,41 @@
-
 import 'package:flutter_deer/common/common.dart';
-import 'package:flutter_deer/generated/json/base/json_convert_content.dart';
+import 'package:flutter_deer/net/error_handle.dart';
 
-class BaseEntity<T> {
-
+class BaseEntity {
   int code;
   String message;
-  T data;
-  List<T> listData = [];
+  dynamic data;
+  List<dynamic> listData = [];
+
+  bool isList;
+  bool isData;
+  bool isError;
 
   BaseEntity(this.code, this.message, this.data);
 
-  BaseEntity.fromJson(Map<String, dynamic> json) {
-    code = json[Constant.code] as int;
-    message = json[Constant.message] as String;
-    if (json.containsKey(Constant.data)) {
-      if (json[Constant.data] is List) {
-        (json[Constant.data] as List).forEach((item) {
-          listData.add(_generateOBJ<T>(item));
-        });
-      } else {
-        data = _generateOBJ(json[Constant.data]);
-      }
+  BaseEntity.fromJson(Map<dynamic, dynamic> json) {
+    //    错误
+    if (json[Constant.error] != null) {
+      json = json[Constant.error];
+      code = json[Constant.code] ?? ExceptionHandle.not_found;
+      message = json[Constant.message] ?? '请求失败';
+      isError = true;
+      return;
     }
-  }
 
-  S _generateOBJ<S>(json) {
-    if (S.toString() == 'String') {
-      return json.toString() as S;
-    } else if (T.toString() == 'Map<dynamic, dynamic>') {
-      return json as S;
-    } else {
-      return JsonConvert.fromJsonAsT<S>(json);
+    //    处理list
+    if (json[Constant.list] != null) {
+      listData = json[Constant.list];
+      code = ExceptionHandle.success;
+      message = '请求成功';
+//      (json as List).forEach((item) {
+//        listData.add(item);
+//      });
+      isList = true;
+      return;
     }
+
+    data = json;
+    isData = true;
   }
 }

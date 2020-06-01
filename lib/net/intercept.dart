@@ -1,32 +1,26 @@
-
-
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter_deer/common/common.dart';
 import 'package:flutter_deer/util/log_utils.dart';
-import 'package:sprintf/sprintf.dart';
 
 import 'dio_utils.dart';
 import 'error_handle.dart';
 
-class AuthInterceptor extends Interceptor{
+class AuthInterceptor extends Interceptor {
   @override
-  Future onRequest(RequestOptions options) {
-    var accessToken = SpUtil.getString(Constant.accessToken);
+  onRequest(RequestOptions options) {
+    String accessToken = SpUtil.getString(Constant.accessToken);
     if (accessToken.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
-   
     return super.onRequest(options);
   }
 }
 
-class TokenInterceptor extends Interceptor{
-
+class TokenInterceptor extends Interceptor {
   Future<String> getToken() async {
-
     Map<String, String> params = Map();
     params['refresh_token'] = SpUtil.getString(Constant.refreshToken);
     try {
@@ -35,7 +29,7 @@ class TokenInterceptor extends Interceptor{
       if (response.statusCode == ExceptionHandle.success) {
         return json.decode(response.data.toString())['access_token'];
       }
-    } catch(e) {
+    } catch (e) {
       Log.e('刷新Token失败！');
     }
     return null;
@@ -44,9 +38,10 @@ class TokenInterceptor extends Interceptor{
   Dio _tokenDio = Dio();
 
   @override
-  Future<Object> onResponse(Response response) async {
-    //401代表token过期
-    if (response != null && response.statusCode == ExceptionHandle.unauthorized) {
+  onResponse(Response response) async {
+    //401代表无权限
+    if (response != null &&
+        response.statusCode == ExceptionHandle.unauthorized) {
       Log.d('-----------自动刷新Token------------');
       Dio dio = DioUtils.instance.dio;
       dio.interceptors.requestLock.lock();
@@ -61,6 +56,7 @@ class TokenInterceptor extends Interceptor{
         request.headers['Authorization'] = 'Bearer $accessToken';
         try {
           Log.e('----------- 重新请求接口 ------------');
+
           /// 避免重复执行拦截器，使用tokenDio
           var response = await _tokenDio.request(request.path,
               data: request.data,
@@ -78,19 +74,22 @@ class TokenInterceptor extends Interceptor{
   }
 }
 
-class LoggingInterceptor extends Interceptor{
-
+class LoggingInterceptor extends Interceptor {
   DateTime _startTime;
   DateTime _endTime;
-  
+
   @override
-  Future onRequest(RequestOptions options) {
+  onRequest(RequestOptions options) {
     _startTime = DateTime.now();
     Log.d('----------Start----------');
     if (options.queryParameters.isEmpty) {
       Log.d('RequestUrl: ' + options.baseUrl + options.path);
     } else {
-      Log.d('RequestUrl: ' + options.baseUrl + options.path + '?' + Transformer.urlEncodeMap(options.queryParameters));
+      Log.d('RequestUrl: ' +
+          options.baseUrl +
+          options.path +
+          '?' +
+          Transformer.urlEncodeMap(options.queryParameters));
     }
     Log.d('RequestMethod: ' + options.method);
     Log.d('RequestHeaders:' + options.headers.toString());
@@ -98,9 +97,9 @@ class LoggingInterceptor extends Interceptor{
     Log.d('RequestData: ${options.data.toString()}');
     return super.onRequest(options);
   }
-  
+
   @override
-  Future onResponse(Response response) {
+  onResponse(Response response) {
     _endTime = DateTime.now();
     int duration = _endTime.difference(_startTime).inMilliseconds;
     if (response.statusCode == ExceptionHandle.success) {
@@ -113,16 +112,15 @@ class LoggingInterceptor extends Interceptor{
     Log.d('----------End: $duration 毫秒----------');
     return super.onResponse(response);
   }
-  
+
   @override
-  Future onError(DioError err) {
+  onError(DioError err) {
     Log.d('----------Error-----------');
     return super.onError(err);
   }
 }
 
-class AdapterInterceptor extends Interceptor{
-
+class AdapterInterceptor extends Interceptor {
   static const String _kMsg = 'msg';
   static const String _kSlash = '\'';
   static const String _kMessage = 'message';
@@ -131,16 +129,17 @@ class AdapterInterceptor extends Interceptor{
   static const String _kNotFound = '未找到查询信息';
 
   static const String _kFailureFormat = '{\"code\":%d,\"message\":\"%s\"}';
-  static const String _kSuccessFormat = '{\"code\":0,\"data\":%s,\"message\":\"\"}';
-  
+  static const String _kSuccessFormat =
+      '{\"code\":0,\"data\":%s,\"message\":\"\"}';
+
   @override
-  Future onResponse(Response response) {
+  onResponse(Response response) {
     Response r = adapterData(response);
     return super.onResponse(r);
   }
-  
+
   @override
-  Future onError(DioError err) {
+  onError(DioError err) {
     if (err.response != null) {
       adapterData(err.response);
     }
@@ -148,56 +147,28 @@ class AdapterInterceptor extends Interceptor{
   }
 
   Response adapterData(Response response) {
-    String result;
-    String content = response.data == null ? '' : response.data.toString();
-    /// 成功时，直接格式化返回
-    if (response.statusCode == ExceptionHandle.success || response.statusCode == ExceptionHandle.success_not_content) {
-      if (content == null || content.isEmpty) {
-        content = _kDefaultText;
-      }
-      result = sprintf(_kSuccessFormat, [content]);
-      response.statusCode = ExceptionHandle.success;
-    } else {
-      if (response.statusCode == ExceptionHandle.not_found) {
-        /// 错误数据格式化后，按照成功数据返回
-        result = sprintf(_kFailureFormat, [response.statusCode, _kNotFound]);
-        response.statusCode = ExceptionHandle.success;
-      } else {
-        if (content == null || content.isEmpty) {
-          // 一般为网络断开等异常
-          result = content;
-        } else {
-          String msg;
-          try {
-            content = content.replaceAll("\\", '');
-            if (_kSlash == content.substring(0, 1)) {
-              content = content.substring(1, content.length - 1);
-            }
-            Map<String, dynamic> map = json.decode(content);
-            if (map.containsKey(_kMessage)) {
-              msg = map[_kMessage];
-            } else if (map.containsKey(_kMsg)) {
-              msg = map[_kMsg];
-            } else {
-              msg = '未知异常';
-            }
-            result = sprintf(_kFailureFormat, [response.statusCode, msg]);
-            // 401 token失效时，单独处理，其他一律为成功
-            if (response.statusCode == ExceptionHandle.unauthorized) {
-              response.statusCode = ExceptionHandle.unauthorized;
-            } else {
-              response.statusCode = ExceptionHandle.success;
-            }
-          } catch (e) {
-            Log.d('异常信息：$e');
-            // 解析异常直接按照返回原数据处理（一般为返回500,503 HTML页面代码）
-            result = sprintf(_kFailureFormat, [response.statusCode, '服务器异常(${response.statusCode})']);
+    String content = response.data?.toString();
+
+    /// 成功时，直接返回
+    /// 如果没有内容,则作为没有找到的错误返回
+    if (response.statusCode == ExceptionHandle.success ||
+        response.statusCode == ExceptionHandle.success_not_content) {
+      // data为空
+      if (content == null || content.isEmpty || content == 'null') {
+        response.data = {
+          Constant.error: {
+            Constant.code: ExceptionHandle.not_found,
+            Constant.message: _kNotFound
           }
-        }
+        };
+
+        response.statusCode = ExceptionHandle.not_found;
+        return response;
       }
+      return response;
     }
-    response.data = result;
+
+    /// 错误时，直接格式化返回
     return response;
   }
 }
-
