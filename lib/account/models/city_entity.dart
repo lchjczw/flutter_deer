@@ -1,13 +1,19 @@
-import 'package:azlistview/azlistview.dart';
-import 'package:flutter_deer/generated/json/base/json_convert_content.dart';
+class CityEntity {
+  String name;
+  String cityCode;
+  String firstCharacter;
 
-class CityEntity with JsonConvert<CityEntity>, ISuspensionBean {
-	String name;
-	String cityCode;
-	String firstCharacter;
+  CityEntity.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    cityCode = json['city_code'];
+    firstCharacter = json['first_character'];
+  }
 
-	@override
-	String getSuspensionTag() {
-		return firstCharacter;
-	}
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['city_code'] = this.cityCode;
+    data['first_character'] = this.firstCharacter;
+    return data;
+  }
 }

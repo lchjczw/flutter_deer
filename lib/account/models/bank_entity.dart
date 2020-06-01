@@ -1,15 +1,21 @@
-import 'package:azlistview/azlistview.dart';
-import 'package:flutter_deer/generated/json/base/json_convert_content.dart';
+class BankEntity {
+  int id;
+  String bankName;
+  String firstLetter;
 
-class BankEntity with JsonConvert<BankEntity>, ISuspensionBean {
-	int id;
-	String bankName;
-	String firstLetter;
+  BankEntity({this.id, this.bankName, this.firstLetter});
 
-	BankEntity({this.id, this.bankName, this.firstLetter});
+  BankEntity.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    bankName = json['bank_name'];
+    firstLetter = json['first_letter'];
+  }
 
-  @override
-  String getSuspensionTag() {
-		return firstLetter;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['bank_name'] = this.bankName;
+    data['first_letter'] = this.firstLetter;
+    return data;
   }
 }
