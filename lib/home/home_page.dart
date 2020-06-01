@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var _pageList;
 
-  var _appBarTitles = ['我的'];
+  var _appBarTitles = ['首页', '我的'];
   final _pageController = PageController();
 
   HomeProvider provider = HomeProvider();
@@ -32,48 +32,13 @@ class _HomeState extends State<Home> {
   void initData() {
     _pageList = [
       UserPage(),
+      UserPage(),
     ];
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItem() {
     if (_list == null) {
       var _tabImages = [
-        [
-          const LoadAssetImage(
-            'home/icon_order',
-            width: 25.0,
-            color: Colours.unselected_item_color,
-          ),
-          const LoadAssetImage(
-            'home/icon_order',
-            width: 25.0,
-            color: Colours.app_main,
-          ),
-        ],
-        [
-          const LoadAssetImage(
-            'home/icon_commodity',
-            width: 25.0,
-            color: Colours.unselected_item_color,
-          ),
-          const LoadAssetImage(
-            'home/icon_commodity',
-            width: 25.0,
-            color: Colours.app_main,
-          ),
-        ],
-        [
-          const LoadAssetImage(
-            'home/icon_statistics',
-            width: 25.0,
-            color: Colours.unselected_item_color,
-          ),
-          const LoadAssetImage(
-            'home/icon_statistics',
-            width: 25.0,
-            color: Colours.app_main,
-          ),
-        ],
         [
           const LoadAssetImage(
             'home/icon_shop',
@@ -99,7 +64,7 @@ class _HomeState extends State<Home> {
           ),
         ]
       ];
-      _list = List.generate(5, (i) {
+      _list = List.generate(2, (i) {
         return BottomNavigationBarItem(
             icon: _tabImages[i][0],
             activeIcon: _tabImages[i][1],
@@ -119,30 +84,6 @@ class _HomeState extends State<Home> {
     if (_listDark == null) {
       var _tabImagesDark = [
         [
-          const LoadAssetImage('home/icon_order', width: 25.0),
-          const LoadAssetImage(
-            'home/icon_order',
-            width: 25.0,
-            color: Colours.dark_app_main,
-          ),
-        ],
-        [
-          const LoadAssetImage('home/icon_commodity', width: 25.0),
-          const LoadAssetImage(
-            'home/icon_commodity',
-            width: 25.0,
-            color: Colours.dark_app_main,
-          ),
-        ],
-        [
-          const LoadAssetImage('home/icon_statistics', width: 25.0),
-          const LoadAssetImage(
-            'home/icon_statistics',
-            width: 25.0,
-            color: Colours.dark_app_main,
-          ),
-        ],
-        [
           const LoadAssetImage('home/icon_shop', width: 25.0),
           const LoadAssetImage(
             'home/icon_shop',
@@ -160,7 +101,7 @@ class _HomeState extends State<Home> {
         ]
       ];
 
-      _listDark = List.generate(5, (i) {
+      _listDark = List.generate(2, (i) {
         return BottomNavigationBarItem(
             icon: _tabImagesDark[i][0],
             activeIcon: _tabImagesDark[i][1],
