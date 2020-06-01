@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/goods/page/goods_page.dart';
 import 'package:flutter_deer/home/provider/home_provider.dart';
-import 'package:flutter_deer/order/page/order_page.dart';
 import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/shop/page/shop_page.dart';
-import 'package:flutter_deer/statistics/page/statistics_page.dart';
 import 'package:flutter_deer/user/page/user_page.dart';
 import 'package:flutter_deer/util/double_tap_back_exit_app.dart';
 import 'package:flutter_deer/util/theme_utils.dart';
@@ -19,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var _pageList;
 
-  var _appBarTitles = ['订单', '商品', '统计', '店铺', '我的'];
+  var _appBarTitles = ['我的'];
   final _pageController = PageController();
 
   HomeProvider provider = HomeProvider();
@@ -35,10 +31,6 @@ class _HomeState extends State<Home> {
 
   void initData() {
     _pageList = [
-      OrderPage(),
-      GoodsPage(),
-      StatisticsPage(),
-      ShopPage(),
       UserPage(),
     ];
   }
